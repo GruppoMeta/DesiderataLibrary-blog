@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model:Model
+    xmlns:glz="http://www.glizy.org/dtd/1.0/"
+    xmlns:model="http://www.glizy.org/dtd/1.0/model/"
+    model:tableName="desiderataLibrary.modules.blog" model:usePrefix="true" model:type="document">
+
+    <model:Define>
+        <!-- system -->
+        <model:Field name="title" type="string" length="255" index="true" />
+        <model:Field name="fulltext" type="string" index="fulltext" onlyIndex="true" />
+        <model:Field name="year" type="int" index="true" onlyIndex="true" />
+
+        <!-- custom -->
+        <model:Field name="external_id" type="int" index="true" />
+        <model:Field name="subtitle" type="string" length="255" />
+        <model:Field name="author" type="string" length="255" index="true" />
+        <model:Field name="text" type="text" />
+        <model:Field name="category" type="string" index="true" />
+        <model:Field name="date" type="date" validator="date,notnull" index="true" />
+        <model:Field name="image" type="string" />
+        <model:Field name="hasComment" type="int" length="1" index="true" />
+
+        <model:Field name="story" type="object" readFormat="false" />
+        <model:Field name="media" type="object" readFormat="false" />
+    </model:Define>
+
+    <model:Script parent="model">
+    <![CDATA[
+    public function save($values=NULL, $forceNew=false, $status='DRAFT') {
+        $this->createAddictionalIndex();
+        return parent::save($values, $forceNew, $status);
+    }
+
+    public function publish($values = null, $comment='', $forceNew=false) {
+        $this->createAddictionalIndex();
+        return parent::publish($values, $comment, $forceNew);
+    }
+
+    private function createAddictionalIndex()
+    {
+        $this->year = '';
+        $startDate = glz_localeDate2default($this->getFieldValue('date'));
+        if ($startDate) {
+            $this->year = substr($startDate, 0, strpos($startDate, '-'));
+        }
+    }
+    ]]>
+    </model:Script>
+
+    <model:Query name="list" type="function">
+    <![CDATA[
+        $iterator->select('*')
+                ->leftJoin('doc', 'mw_users_tbl', 't2', 'doc_detail.document_detail_FK_user_id = t2.user_id')
+                ->orderBy('date', 'DESC');
+    ]]>
+    </model:Query>
+</model:Model>

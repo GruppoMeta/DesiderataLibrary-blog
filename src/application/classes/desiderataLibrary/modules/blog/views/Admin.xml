@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<glz:include
+    xmlns:cms="org.glizycms.views.components.*"
+    xmlns:mvc="org.glizy.mvc.components.*"
+    src="org.glizycms.views.TemplateModuleAdmin">
+    <glz:template name="model" value="desiderataLibrary.modules.blog.models.Model" />
+    <glz:template name="show_external_id" value="false" />
+    <glz:template name="controller_name" value="desiderataLibrary.modules.blog.controllers.be.*" />
+    <glz:template name="filter_class" value="desiderataLibrary.modules.blog.filters.DataGridFilter" />
+
+    <glz:template name="grid_fields">
+        <glz:DataGridColumn columnName="title" headerText="{i18n:Titolo}" renderCell="org.glizycms.contents.views.renderer.DocumentTitle" />
+        <glz:DataGridColumn columnName="category" headerText="{i18n:Tipologia}" />
+        <glz:DataGridColumn columnName="author" headerText="{i18n:Autore}" />
+        <glz:DataGridColumn columnName="date" headerText="{i18n:Data}" />
+    </glz:template>
+
+    <glz:template name="form_fields">
+        <glz:Hidden id="external_id" />
+        <glz:Input id="title" label="{i18n:Titolo}" size="90" required="true" />
+        <glz:Input id="subtitle" label="{i18n:Sottotitolo}" size="90" />
+        <glz:Input id="date" label="{i18n:Data}" size="40" required="true" data="type=date" />
+        <glz:Input id="category" label="{i18n:Pubblicazione}" required="true" data="type=selectfrom;multiple=false;add_new_values=true;model=desiderataLibrary.modules.blog.models.Model" size="255" />
+        <glz:Input id="author" label="{i18n:Autore}" required="true" data="type=selectfrom;multiple=false;add_new_values=true;model=desiderataLibrary.modules.blog.models.Model" size="255"  />
+        <glz:Input id="text" label="{i18n:Testo}" type="multiline" rows="10" cols="70" htmlEditor="true" data="type=tinymce" required="true" />
+        <glz:Checkbox id="hasComment" label="{i18n:MW_BLOG_ENABLE_COMMENTS}" data="type=checkbox" />
+
+        <glz:Fieldset id="story" label="{i18n:Storia}" data="type=repeat;collapsable=false">
+            <glz:Input id="storyTitle" label="{i18n:Titolo elemento storia}" size="50" />
+            <glz:Hidden id="hash" data="type=inputguid;base=st" />
+            <glz:List id="type" label="{i18n:Story item type}" data="target=storyTitle,storyText,storyImage,storyVideo,storyUrl,storyGallery,storyGalleryType;val_0=1,1,0,0,0,0,0;val_1=1,0,1,0,0,0,0;val_2=1,0,0,1,0,0,0;val_3=1,0,0,0,1,0,0;val_4=1,0,0,0,0,1,1;">
+                <glz:ListItem value="{i18n:Testo}" key="text" />
+                <glz:ListItem value="{i18n:Immagine}" key="image" />
+                <glz:ListItem value="{i18n:Video}" key="video" />
+                <glz:ListItem value="{i18n:Video esterno}" key="video_ext" />
+                <glz:ListItem value="{i18n:Galleria fotografica}" key="photogallery" />
+            </glz:List>
+
+            <glz:Input id="storyText" label="{i18n:Testo}" type="multiline" rows="10" cols="70" htmlEditor="true" data="type=tinymce" required="true" />
+
+            <glz:Input id="storyImage" label="{i18n:Immagine}" size="90" data="type=mediapicker;mediatype=IMAGE;preview=true"/>
+            <glz:Input id="storyVideo" label="{i18n:Video}" size="90" data="type=mediapicker;mediatype=VIDEO;preview=false"/>
+            <glz:Input id="storyUrl" label="{i18n:Video url}" size="50" />
+
+            <glz:List id="storyGalleryType" label="{i18n:Gallery type}">
+                <glz:ListItem value="{i18n:Gallery}" key="gallery" />
+                <glz:ListItem value="{i18n:Slideshow}" key="slideshow" />
+                <glz:ListItem value="{i18n:Slider}" key="slider" />
+                <glz:ListItem value="{i18n:Page flip}" key="pageflip" />
+            </glz:List>
+            <glz:Input id="storyGallery" label="{i18n:Image category}" data="type=selectfrom;multiple=true;add_new_values=false;model=org.glizycms.models.Media;field=media_category;override=false" />
+        </glz:Fieldset>
+
+        <glz:Fieldset id="media" label="{i18n:Documenti da scaricare}" data="type=repeat;collapsable=false">
+            <glz:Input id="media_id" label="{i18n:Media}" size="90" data="type=mediapicker;mediatype=ALL;preview=false"/>
+        </glz:Fieldset>
+    </glz:template>
+
+    <glz:template name="custom_states">
+        <mvc:State name="faker">
+            <glz:Hidden controllerName="desiderataLibrary.modules.blog.controllers.Faker" />
+        </mvc:State>
+    </glz:template>
+</glz:include>

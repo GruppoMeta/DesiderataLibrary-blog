@@ -1,0 +1,115 @@
+<span tal:omit-tag="" tal:condition="Component/subtitle">
+    <h3 class="subtitle" tal:content="Component/subtitle" />
+</span>
+<span tal:omit-tag=""
+        metal:use-macro="_macro.html/boxAttachments"
+        tal:define="media Component/media" />
+
+<span tal:omit-tag="" tal:content="structure Component/text" />
+
+<div class="storyteller" tal:condition="php: Component.story.count()">
+    <div class="content-story">
+    <script src="static/galleria/galleria-1.4.2.min.js"></script>
+    <script>
+    var galleries = [];
+    function galleriaio_loadNext() {
+        if (galleries.length) {
+            var callback = galleries.shift();
+            callback();
+        }
+    }
+
+    $(function(){
+        // jQuery('video,audio').mediaelementplayer();
+        galleriaio_loadNext();
+    });
+    </script>
+    <span tal:omit-tag="" tal:repeat="item Component/story">
+        <article class="item-box link js-text" tal:condition="php:item.type=='text'">
+            <div class="content-box-item">
+                <article class="item-linked">
+                    <div class="clearfix">
+                        <h1 class="title" tal:condition="item/storyTitle" tal:content="item/storyTitle"></h1>
+                        <span tal:omit-tag="" tal:content="structure item/storyText" />
+                    </div>
+                </article>
+            </div>
+        </article>
+        <article class="item-box link js-text" tal:condition="php:item.type=='image'">
+            <div class="content-box-item">
+                <article class="item-linked">
+                    <div class="clearfix">
+                        <h1 class="title" tal:condition="item/storyTitle" tal:content="item/storyTitle"></h1>
+                        <figure tal:condition="item/storyImage" style="max-width:100%" tal:content="structure php:org_glizy_helpers_Media::getImageById(item.storyImage)">
+                        </figure>
+                    </div>
+                </article>
+            </div>
+        </article>
+        <article class="item-box link js-text" tal:condition="php:item.type=='video'">
+           <div class="content-box-item">
+                <article class="item-linked">
+                    <div class="clearfix">
+                        <h1 class="title" tal:condition="item/storyTitle" tal:content="item/storyTitle"></h1>
+                        <video controls="" width="100%" style="max-width: 100%" tal:attributes="src php:org_glizy_helpers_Media::getFileUrlById(item.video, true)" />
+                    </div>
+                </article>
+            </div>
+        </article>
+        <article class="item-box link js-text" tal:condition="php:item.type=='youtube'">
+           <div class="content-box-item">
+                 <article class="item-linked">
+                    <h1 class="title" tal:condition="item/storyTitle" tal:content="item/storyTitle"></h1>
+                    <iframe width="640" height="360" frameborder="0" allowfullscreen="" tal:attributes="src item/storyUrl"></iframe>
+                </article>
+            </div>
+        </article>
+        <article class="item-box link js-text" tal:condition="php:item.type=='vimeo'">
+           <div class="content-box-item">
+                 <article class="item-linked">
+                    <h1 class="title" tal:condition="item/storyTitle" tal:content="item/storyTitle"></h1>
+                    <iframe width="640" height="360" frameborder="0" allowfullscreen="" tal:attributes="src item/storyUrl"></iframe>
+                </article>
+            </div>
+        </article>
+        <article class="item-box link js-text" tal:condition="php:item.type=='photogallery'">
+           <div class="content-box-item">
+                <h1 class="title" tal:condition="item/storyTitle" tal:content="item/storyTitle"></h1>
+                <div tal:attributes="class php: 'wrapper-galleria-io ' . item.storyGalleryType" tal:condition="php: item.storyGallery AND item.storyGallery.count()">
+                    <div class="content-galleria-io" >
+                        <div tal:attributes="id php: 'galleria' . item.hash" style="height: 500px"></div>
+                        <script>
+galleries.push(function(){
+    var data = [];
+    <span tal:omit-tag="" tal:repeat="subitem item/storyGallery">
+    data.push({ "title": "<span tal:omit-tag="" tal:content="structure php: glz_stringToJs(subitem.media_title)" />",
+                "description": "<span tal:omit-tag="" tal:content="structure php: glz_stringToJs(subitem.media_description, true)" />",
+                "thumb": "<span tal:omit-tag="" tal:content="php:org_glizy_helpers_Media::getResizedImageUrlById(subitem.media_id, false, __Config::get('THUMB_WIDTH'), __Config::get('THUMB_HEIGHT'), true)" />",
+                "image": "<span tal:omit-tag="" tal:content="php:org_glizy_helpers_Media::getUrlById(subitem.media_id)" />"
+            });
+    </span>
+    Galleria.loadTheme('static/galleria/themes/movio/galleria.<span tal:omit-tag="" tal:content="item/storyGalleryType" />.js');
+    Galleria.run('<span tal:omit-tag="" tal:content="php: '#galleria' . item.hash" />', {
+        dataSource: data, imageCrop: <span tal:omit-tag="" tal:content="item/storyGalleryImageCrop" />, imagePan: <span tal:omit-tag="" tal:content="item/storyGalleryImagePan" />, imagePosition: '<span tal:omit-tag="" tal:content="item/storyGalleryImagePosition" />'
+    });
+
+    Galleria.ready(function() {
+        galleriaio_loadNext();
+    });
+});
+                        </script>
+                        </div>
+                    </div>
+                </div>
+        </article>
+
+    </span>
+</div>
+</div>
+
+<div class="blog-info">
+    <span tal:omit-tag="" tal:content="structure php: __T('MW_BLOG_POSTED_BY')" />:
+    <span class="blogAuthor" tal:content="Component/author" />,
+    <span class="item-post-date" tal:content="Component/date" />,
+    <span class="item-post-permalink"><a tal:attributes="href Component/__url__; title Component/title" tal:content="structure php: __T('MW_BLOG_PERMALINK')"></a></span>
+</div>

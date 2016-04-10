@@ -1,0 +1,8 @@
+<div class="publications">
+    <h2>Pubblicazioni</h2>
+    <div class="item" tal:repeat="item Component">
+        <div class="cover" tal:condition="php: item.cover"><a tal:attributes="href item/__url__; title item/__title" tal:content="structure php: org_glizy_helpers_Media::getResizedImageById(item.cover.id, false, 160, 230)"></a>
+        </div>
+        <h3><a tal:attributes="href item/__url__; title item/__title" tal:content="item/__title"></a></h3>
+    </div>
+</div>

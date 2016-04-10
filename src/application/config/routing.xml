@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<glz:Routing>
+    <glz:Route name="redirect" value="go/{value=module}/{value=id}" controller="metacms.controllers.cms.Redirect" />
+
+    <glz:Route name="registration" value="{pageId=registration}" />
+    <glz:Route name="lostpassword" value="{pageId=lostpassword}" />
+    <glz:Route name="userdetails" value="{pageId=userdetails}" />
+    <glz:Route name="logout" value="logout" pageId="login" action="logout" />
+
+    <glz:Route name="solr" value="{pageId=Search}" />
+
+    <glz:Route name="linkChangeAction" value="{pageId}/{pageTitle}/{value=action}" />
+    <glz:Route name="link" value="{pageId}/{pageTitle}" />
+</glz:Routing>

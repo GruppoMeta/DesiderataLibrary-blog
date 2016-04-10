@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<glz:Routing>
+    <glz:Route name="desiderataLibrary_blog_archive" value="{pageId=desiderataLibrary.modules.blog.views.FrontEnd}" />
+	<glz:Route name="desiderataLibrary_blog" value="{currentMenu}/{static=action=show}/{integer=document_id}/{value=title}" />
+    <glz:Route name="desiderataLibrary_blog_link" value="{pageId}/{static=action=show}/{integer=document_id}/{value=title}" parseUrl="false" />
+</glz:Routing>
